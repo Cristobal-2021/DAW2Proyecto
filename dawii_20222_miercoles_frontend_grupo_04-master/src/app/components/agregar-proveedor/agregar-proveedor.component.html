@@ -1,0 +1,101 @@
+<app-menu></app-menu>
+<div style="padding: 2%">
+  <form class="content" (ngSubmit)="registra()" [formGroup]="formsRegistra">
+    <div class="submit-form">
+
+      <div class="row">
+        <div class="col-lg-12">
+          <h2 class="text-center">Registro de Proveedor</h2>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top: 3%">
+        <div class="col-lg-4">
+          <label for="razonsocial">Razón social</label>
+          <input formControlName="validaRazonSocial" type="text" class="form-control" name="razonsocial"
+            id="razonsocial" maxlength="40" [(ngModel)]="objProveedor.razonsocial" />
+          <div *ngIf="submitted && formsRegistra.controls.validaRazonSocial.errors" class="invalid">
+            <ul>
+              <li>La razón social es obligatoria</li>
+              <li>Debe tener de 3 a 30 caracteres</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <label for="ruc">RUC</label>
+          <input formControlName="validaRuc" type="text" class="form-control" name="ruc" id="ruc"
+            [(ngModel)]="objProveedor.ruc" maxlength="11" />
+          <div *ngIf="submitted && formsRegistra.controls.validaRuc.errors" class="invalid">
+            <ul>
+              <li>El RUC es obligatorio</li>
+              <li>El RUC debe tener 11 números</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <label for="direccion">Dirección</label>
+          <input formControlName="validaDireccion" type="text" class="form-control" name="direccion" id="direccion"
+            maxlength="40" [(ngModel)]="objProveedor.direccion" />
+          <div *ngIf="submitted && formsRegistra.controls.validaDireccion.errors" class="invalid">
+            <ul>
+              <li>La dirección es obligatoria</li>
+              <li>La dirección debe tener de 3 a 30 caracteres</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top: 3%">
+        <div class="col-lg-4">
+          <label for="celular">Celular</label>
+          <input formControlName="validaCelular" type="text" class="form-control" name="celular" id="celular"
+            maxlength="9" [(ngModel)]="objProveedor.celular" />
+          <div *ngIf="submitted && formsRegistra.controls.validaCelular.errors" class="invalid">
+            <ul>
+              <li>El celular es obligatorio</li>
+              <li>El celular debe tener 9 números y empezar con 9</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <label for="contacto">Contacto</label>
+          <input formControlName="validaContacto" type="text" class="form-control" name="contacto" id="contacto"
+            maxlength="40" [(ngModel)]="objProveedor.contacto" />
+          <div *ngIf="submitted && formsRegistra.controls.validaContacto.errors" class="invalid">
+            <ul>
+              <li>El contacto es obligatorio</li>
+              <li>El contacto debe tener de 3 a 30 caracteres</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <label for="pais">Pais</label>
+          <select formControlName="validaPais" id="pais" name="pais" class="form-control"
+            [(ngModel)]="objProveedor.pais!.idPais">
+            <option value="-1"> [Seleccione] </option>
+            <option *ngFor="let x of lstPaises" value="{{x.idPais}}">{{x.nombre}}</option>
+          </select>
+          <div *ngIf="submitted && formsRegistra.controls.validaPais.errors" class="invalid">
+            <ul>
+              <li>Seleccione un país</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top: 3%">
+        <div class="col-lg-12">
+          <button [disabled]="submitted && formsRegistra.invalid" class="btn btn-success">Enviar</button>
+        </div>
+      </div>
+
+
+    </div>
+
+  </form>
+
+</div>

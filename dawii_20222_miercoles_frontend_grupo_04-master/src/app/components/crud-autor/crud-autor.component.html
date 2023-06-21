@@ -1,0 +1,294 @@
+<app-menu></app-menu>
+<div style="padding: 2%">
+
+        <h5>Crud de Autor</h5>
+    
+    
+                <form class="content"  (submit)="consultaAutor()">
+
+                <div class="row" style="margin-top: 2%">
+                        <label for="dni" class="col-lg-1">Nombre</label>
+                        <div class="col-lg-2">
+                            <input type="text" class="form-control" name="nombre" id="nombre"  [(ngModel)]= "nombre" />
+                        </div>
+                        <label for="dni" class="col-lg-1">Apellido</label>
+                        <div class="col-lg-2">
+                            <input type="text" class="form-control" name="apellido" id="apellido"  [(ngModel)]= "apellido" />
+                        </div>
+                        <label for="dni" class="col-lg-1">Telefono</label>
+                        <div class="col-lg-2">
+                            <input type="text" class="form-control" name="dni" id="dni"  [(ngModel)]= "telefono" />
+                        </div>
+                        <label for="deporte">Grado</label>
+                        <div class="col-lg-2">
+                            <select  id="deporte" name="pais" class="form-control" [(ngModel)]="idGrado" >
+                                <option value="-1"> [Seleccione] </option>  
+                                <option *ngFor="let x of lstGrado" value="{{x.idGrado}}">
+                                        {{x.descripcion}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-lg-1" style="margin-top: 2%">
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="estado" [(ngModel)]= "estado" checked  name="estado"/>
+                                <label class="custom-control-label" for="estado">Estado</label>
+                            </div>
+                        </div>
+                        <div style="margin-top: 1%">
+                                <button class="btn btn-success"  >Filtrar</button>
+                        </div>  
+                        <div  class="col-lg-1" style="margin-top: 1%">
+                                <button  type="button" data-toggle='modal' data-target="#idModalRegistrar" class='btn btn-primary'>Registrar</button>
+                        </div>
+                 </div>
+                 </form>
+    
+                 <div class="row" style="margin-top: 3%">
+    
+                        <table id="id_table" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                        <th>ID</th>
+                                        <th>Nombre</th>
+                                        <th>APELLIDOS</th>
+                                        <th>FECHA NACIMIENTO</th>
+                                        <th>TELEFONO</th>
+                                        <th>FECHA REGISTRO</th>
+                                        <th>ESTADO</th>
+                                        <th>GRADO</th>
+                                    <th style="width: 7%"></th>
+                                    <th style="width: 7%"></th>
+                                    <th style="width: 7%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                           <tr *ngFor="let x of lstAutor">
+                                    <td>{{ x.idAutor }}</td>  
+                                    <td>{{ x.nombres }}</td>
+                                    <td>{{ x.apellidos }}</td>    
+                                    <td>{{ x.fechaNacimiento }}</td>    
+                                    <td>{{ x.telefono }}</td>  
+                                    <td>{{ x.fechaRegistro }}</td>    
+                                    <td>{{ x.estado ==1 ?"Activo":"Inactivo"  }}</td>    
+                                    <td>{{ x.grado!.descripcion}}</td>    
+                                    <td>
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" 
+                                                    id="idEstado_{{ x.idAutor }}" name="estado" 
+                                                    [checked]="x.estado==1?true:false" 
+                                                    (change)="actualizaEstado(x)"  />         
+                                            <label class="custom-control-label" for="idEstado_{{ x.idAutor }}"></label>
+                                        </div>  
+                                    </td>
+                                    <td><button type="button" (click)="busca(x)" style="width: 90px" 
+                                                    class="btn btn-success btn-sm"
+                                                    data-toggle="modal" 
+                                                    data-target="#idModalActualizar">Editar</button>
+                                    </td>
+                                    <td><button  (click)="elimina(x.idAutor)" type="button" style="width: 90px" 
+                                                class="btn btn-danger btn-sm"  >Eliminar</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+    
+            </div>
+    
+    
+        <div class="modal fade"  id="idModalRegistrar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    
+            <div class="modal-dialog" style="max-width: 70%;">
+                <div class="modal-content" >
+    
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Registro de autor</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    
+                    <div class="modal-body">
+                        <form class="content" [formGroup]="formsRegistra">
+                            <div class="submit-form">
+                                
+                                    <div  class="row">
+                                        <div class="col-lg-6">
+                                                <label for="nombre">Nombres</label>
+                                                <input  formControlName="validaNombre" type="text" class="form-control"  id="idNombre" [(ngModel)]="autor.nombres"  name="autor.nombres" placeholder="Ingrese los nombres" />
+                                            <div *ngIf="submitted && formsRegistra.controls.validaNombre.errors" class="invalid">       
+                                                <ul>
+                                                    <li>El nombre es obligatorio</li>    
+                                                    <li>El nombre es de 3 a 30 caracteres</li>    
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6">
+                                                <label for="nombre">Apellidos</label>
+                                                <input formControlName="validaApellido" type="text" class="form-control"  id="idNombre" [(ngModel)]="autor.apellidos"  name="autor.apellidos"  placeholder="Ingrese los apellidos" />
+                                            <div *ngIf="submitted && formsRegistra.controls.validaApellido.errors" class="invalid">       
+                                                <ul>
+                                                    <li>El apellido es obligatorio</li>    
+                                                    <li>El apellido es de 3 a 30 caracteres</li>    
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-2">
+                                                <label for="nombre">Telefono</label>
+                                                <input formControlName="validaTelefono" type="text" class="form-control" name="autor.telefono"  id="idTelefono" [(ngModel)]="autor.telefono"    placeholder="Ingrese el telefono"  />
+                                            <div *ngIf="submitted && formsRegistra.controls.validaTelefono.errors" class="invalid">       
+                                                <ul>
+                                                    <li>El telefono es obligatorio</li>    
+                                                    <li>El telefono es de 3 a 30 caracteres</li>    
+                                                </ul>
+                                            </div>
+                                        </div>
+    
+                                    <div class="col-lg-3">
+                                            <label for="fechaNacimiento">Fecha de Nacimiento</label>
+                                            <input formControlName="validaFecha" type="date"  class="form-control" id="fechaNacimiento"   name="autor.fechaNacimiento"  [(ngModel)] = "autor.fechaNacimiento"/>
+                                        <div *ngIf="submitted && formsRegistra.controls.validaFecha.errors" class="invalid">       
+                                            <ul>
+                                                <li>La fecha de nacimiento es obligatorio</li>    
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                            
+                                    <div class="col-lg-2">
+                                        <label for="deporte">Grado</label>
+                                        <select  formControlName="validaGrado" name="autor.grado!.idGrado" class="form-control" [(ngModel)]="autor.grado!.idGrado" >
+                                            <option value="-1"> [Seleccione] </option>   
+                                            <option *ngFor="let x of lstGrado" value="{{x.idGrado}}">
+                                                {{x.descripcion}}
+                                        </option>
+                                       
+                                        </select>
+                                        <div *ngIf="submitted && formsRegistra.controls.validaGrado.errors" class="invalid">       
+                                                <ul>
+                                                    <li>Seleccione el grado</li>    
+                                                </ul>
+                                            </div>
+    
+                                    </div>
+
+                                    </div>                                    
+    
+                            </div> 
+                            <div class="modal-footer">
+                                <button type="reset" class="btn btn-secondary btn-sm" style="width: 100px;">Limpiar</button>
+                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" id="btn_reg_cerrar" style="width: 100px;">Cerrar</button>
+                                <div class="form-group text-center">
+                                    <div class="col-lg-12">
+                                        <button  (click)="registra()"  id="id_reg_registra"   class="btn btn-success btn-sm "style="width: 100px;" [disabled]="submitted && formsRegistra.invalid">Registrar</button>
+                                    </div>
+                                </div>
+                            </div>
+    
+                   
+                        </form>
+                    </div>
+    
+    
+    
+                </div>
+            </div>
+        </div>
+    
+        <div class="modal fade" id="idModalActualizar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" style="max-width: 80%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Actualización de autor</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                             <span aria-hidden="true">&times;</span>
+                         </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="content" [formGroup]="formsActualiza">
+                            <div class="submit-form">
+                                
+                                    <div  class="row">
+                                        <div class="col-lg-6">
+                                                <label for="nombre">Nombres</label>
+                                                <input  formControlName="validaNombre" type="text" class="form-control"  id="idNombre" [(ngModel)]="autor.nombres"  name="autor.nombres" placeholder="Ingrese los nombres" />
+                                            <div *ngIf=" formsActualiza.controls.validaNombre.errors" class="invalid">       
+                                                <ul>
+                                                    <li>El nombre es obligatorio</li>    
+                                                    <li>El nombre es de 3 a 30 caracteres</li>    
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6">
+                                                <label for="nombre">Apellidos</label>
+                                                <input formControlName="validaApellido" type="text" class="form-control"  id="idNombre" [(ngModel)]="autor.apellidos"  name="autor.apellidos"  placeholder="Ingrese los apellidos" />
+                                            <div *ngIf="submitted && formsActualiza.controls.validaApellido.errors" class="invalid">       
+                                                <ul>
+                                                    <li>El apellido es obligatorio</li>    
+                                                    <li>El apellido es de 3 a 30 caracteres</li>    
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-2">
+                                                <label for="nombre">Telefono</label>
+                                                <input formControlName="validaTelefono" type="text" class="form-control" name="autor.telefono"  id="idTelefono" [(ngModel)]="autor.telefono"    placeholder="Ingrese el telefono"  />
+                                            <div *ngIf="submitted && formsActualiza.controls.validaTelefono.errors" class="invalid">       
+                                                <ul>
+                                                    <li>El telefono es obligatorio</li>    
+                                                    <li>El telefono es de 3 a 30 caracteres</li>    
+                                                </ul>
+                                            </div>
+                                        </div>
+
+    
+                                    <div class="col-lg-3">
+                                        <label for="fechaNacimiento">Fecha de Nacimiento</label>
+                                        <input formControlName="validaFecha" type="date"  class="form-control" id="fechaNacimiento"   name="autor.fechaNacimiento"  [(ngModel)] = "autor.fechaNacimiento"/>
+                                    <div *ngIf="submitted && formsActualiza.controls.validaFecha.errors" class="invalid">       
+                                        <ul>
+                                            <li>La fecha de nacimiento es obligatorio</li>    
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                    <div class="col-lg-2">
+                                            <label for="deporte">Grado</label>
+                                            <select  formControlName="validaGrado" name="autor.grado!.idGrado" class="form-control" [(ngModel)]="autor.grado!.idGrado" >
+                                                <option value="-1"> [Seleccione] </option>   
+                                                <option *ngFor="let x of lstGrado" value="{{x.idGrado}}">
+                                                        {{x.descripcion}}
+                                                </option>
+                                            </select>
+                                            <div *ngIf="submitted && formsActualiza.controls.validaGrado.errors" class="invalid">       
+                                                    <ul>
+                                                        <li>Seleccione el grado</li>    
+                                                    </ul>
+                                                </div>
+                                
+                                
+                                
+                                </div>
+                                </div>
+
+                          
+                                
+    
+                            </div> 
+                            <div class="modal-footer">
+                                <button type="reset" class="btn btn-secondary btn-sm" style="width: 100px;">Limpiar</button>
+                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" id="btn_reg_cerrar" style="width: 100px;">Cerrar</button>
+                                <div class="form-group text-center">
+                                    <div class="col-lg-12">
+                                        <button  (click)="actualiza()"  id="id_reg_registra"   class="btn btn-success btn-sm "style="width: 100px;" [disabled]="submitted && formsActualiza.invalid">Actualizar</button>
+                                    </div>
+                                </div>
+                            </div>
+    
+                   
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>

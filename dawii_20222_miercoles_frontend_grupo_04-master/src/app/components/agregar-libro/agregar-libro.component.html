@@ -1,0 +1,58 @@
+<app-menu></app-menu>
+<div style="padding: 2%">
+        <form class="content" (ngSubmit)="registra()">
+                <div class="submit-form">
+
+                        <div class="row">
+                                <div class="col-lg-12">
+                                        <h6>Registro de Libro </h6>
+                                </div>
+                        </div>
+
+                        <div class="row" style="margin-top: 3%">
+                                <div class="col-lg-4">
+                                        <label for="titulo">Titulo</label>
+                                        <input type="text" class="form-control" name="titulo" id="titulo"
+                                                [(ngModel)]="objLibro.titulo" />
+                                </div>
+
+                                <div class="col-lg-3">
+                                        <label for="anio">Año</label>
+                                        <input type="text" class="form-control" name="anio" id="anio"
+                                                [(ngModel)]="objLibro.anio" />
+                                </div>
+
+                                <div class="col-lg-3">
+                                        <label for="serie">Serie</label>
+                                        <input type="text" class="form-control" name="serie" id="serie"
+                                                [(ngModel)]="objLibro.serie" />
+                                </div>
+                        </div>
+
+                        <div class="row" style="margin-top: 3%">
+                               
+
+                                <div class="col-lg-3">
+                                        <label for="categoria">Categoria</label>
+                                        <select id="categoria" name="categoria" class="form-control"
+                                                [(ngModel)]="objLibro.categoria!.idCategoria">
+                                                <option value="-1"> [Seleccione] </option>
+                                                <option *ngFor="let x of lstCategoria" value="{{x.idCategoria}}">
+                                                        {{ x.descripcion}}
+                                                </option>
+                                        </select>
+                                </div>
+                        </div>
+
+                        <div class="row" style="margin-top: 3%">
+                                <div class="col-lg-12">
+                                        <button class="btn btn-success">Enviar</button>
+                                </div>
+                        </div>
+
+
+                </div>
+
+        </form>
+
+</div>

@@ -1,0 +1,342 @@
+<app-menu></app-menu>
+<div style="padding: 2%">
+
+        <h5>Crud de Alumno</h5>
+    
+    
+                <form class="content"  (submit)="consultaAlumno()">
+
+                <div class="row" style="margin-top: 2%">
+                        <label for="dni" class="col-lg-1">Nombre</label>
+                        <div class="col-lg-2">
+                            <input type="text" class="form-control" name="nombre" id="nombre"  [(ngModel)]= "nombre" />
+                        </div>
+                        <label for="dni" class="col-lg-1">Apellido</label>
+                        <div class="col-lg-2">
+                            <input type="text" class="form-control" name="apellido" id="apellido"  [(ngModel)]= "apellido" />
+                        </div>
+                        <label for="dni" class="col-lg-1">DNI</label>
+                        <div class="col-lg-2">
+                            <input type="text" class="form-control" name="dni" id="dni"  [(ngModel)]= "dni" />
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="estado" [(ngModel)]= "estado" checked  name="estado"/>
+                                <label class="custom-control-label" for="estado">Estado</label>
+                            </div>
+                        </div>
+    
+                        <label for="deporte"  class="col-lg-1" style="margin-top: 1%">Pais</label>
+                        <div class="col-lg-3" style="margin-top: 1%">
+                            <select  id="deporte" name="pais" class="form-control" [(ngModel)]="idPais" >
+                                <option value="-1"> [Seleccione] </option>   
+                                <option *ngFor="let x of lstPaises" value="{{x.idPais}}">
+                                        {{x.nombre}}
+                                </option>
+                            </select>
+                        </div>
+    
+                        <div style="margin-top: 1%">
+                            <button class="btn btn-success"  >Filtrar</button>
+                        </div>
+                        <div  class="col-lg-1" style="margin-top: 1%">
+                                <button  type="button" data-toggle='modal' data-target="#idModalRegistrar" class='btn btn-primary'>Registrar</button>
+                        </div>
+                 </div>
+                 </form>
+    
+                 <div class="row" style="margin-top: 3%">
+    
+                        <table id="id_table" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                        <th>ID</th>
+                                        <th>Nombre</th>
+                                        <th>APELLIDOS</th>
+                                        <th>TELEFONO</th>
+                                        <th>DNI</th>
+                                        <th>CORREO</th>
+                                        <th>FECHA NACIMIENTO</th>
+                                        <th>FECHA REGISTRO</th>
+                                        <th>ESTADO</th>
+                                        <th>PAIS</th>
+                                    <th style="width: 7%"></th>
+                                    <th style="width: 7%"></th>
+                                    <th style="width: 7%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let x of lstAlumnos">
+                                        <td>{{ x.idAlumno }}</td>   
+                                        <td>{{ x.nombres }}</td> 
+                                        <td>{{ x.apellidos }}</td>    
+                                        <td>{{ x.telefono }}</td>    
+                                        <td>{{ x.dni }}</td>    
+                                        <td>{{ x.correo }}</td>    
+                                        <td>{{ x.fechaNacimiento }}</td>    
+                                        <td>{{ x.fechaRegistro }}</td>    
+                                        <td>{{ x.estado ==1 ?"Activo":"Inactivo"  }}</td>    
+                                        <td>{{ x.pais!.nombre}}</td>    
+                                    <td>
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" 
+                                                    id="idEstado_{{ x.idAlumno }}" name="estado" 
+                                                    [checked]="x.estado==1?true:false" 
+                                                    (change)="actualizaEstado(x)"  />         
+                                            <label class="custom-control-label" for="idEstado_{{ x.idAlumno }}"></label>
+                                        </div>  
+                                    </td>
+                                    <td><button type="button" (click)="busca(x)" style="width: 90px" 
+                                                    class="btn btn-success btn-sm"
+                                                    data-toggle="modal" 
+                                                    data-target="#idModalActualizar">Editar</button>
+                                    </td>
+                                    <td><button  (click)="elimina(x.idAlumno)" type="button" style="width: 90px" 
+                                                class="btn btn-danger btn-sm"  >Eliminar</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+    
+            </div>
+    
+    
+        <div class="modal fade"  id="idModalRegistrar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    
+            <div class="modal-dialog" style="max-width: 70%;">
+                <div class="modal-content" >
+    
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Registro de alumno</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    
+                    <div class="modal-body">
+                        <form class="content" [formGroup]="formsRegistra">
+                            <div class="submit-form">
+                                
+                                    <div  class="row">
+                                        <div class="col-lg-6">
+                                                <label for="nombre">Nombres</label>
+                                                <input  formControlName="validaNombre" type="text" class="form-control"  id="idNombre" [(ngModel)]="alumnoRegistra.nombres"  name="alumnoRegistra.nombres" placeholder="Ingrese los nombres" />
+                                            <div *ngIf="submitted && formsRegistra.controls.validaNombre.errors" class="invalid">       
+                                                <ul>
+                                                    <li>El nombre es obligatorio</li>    
+                                                    <li>El nombre es de 3 a 30 caracteres</li>    
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6">
+                                                <label for="nombre">Apellidos</label>
+                                                <input formControlName="validaApellido" type="text" class="form-control"  id="idNombre" [(ngModel)]="alumnoRegistra.apellidos"  name="alumnoRegistra.apellidos"  placeholder="Ingrese los apellidos" />
+                                            <div *ngIf="submitted && formsRegistra.controls.validaApellido.errors" class="invalid">       
+                                                <ul>
+                                                    <li>El apellido es obligatorio</li>    
+                                                    <li>El apellido es de 3 a 30 caracteres</li>    
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-2">
+                                                <label for="nombre">Telefono</label>
+                                                <input formControlName="validaTelefono" type="text" class="form-control" name="alumnoRegistra.telefono"  id="idTelefono" [(ngModel)]="alumnoRegistra.telefono"    placeholder="Ingrese el telefono"  />
+                                            <div *ngIf="submitted && formsRegistra.controls.validaTelefono.errors" class="invalid">       
+                                                <ul>
+                                                    <li>El telefono es obligatorio</li>    
+                                                    <li>El telefono es de 9 digitos</li>    
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        
+                                        <div class="col-lg-2">
+                                            <label for="id_reg_dni">DNI</label>
+                                            <input  formControlName="validaDni" [(ngModel)]="alumnoRegistra.dni" name="alumnoRegistra.dni" type="text" placeholder="Ingrese DNI" class="form-control"  id="id_reg_dni"  maxlength="8"/>
+                                            <div *ngIf="submitted && formsRegistra.controls.validaDni.errors" class="invalid">
+                                                <ul>
+                                                    <li>El DNI es obligatorio</li>    
+                                                    <li>El DNI es de 8 dígitos</li>    
+                                                </ul>
+                                             </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <label for="correo">Correo</label>
+                                            <input formControlName="validaCorreo" type="text" class="form-control" id="idCorreo"  name="alumnoRegistra.correo" [(ngModel)]="alumnoRegistra.correo"  placeholder="Ingrese correo" />
+                                        <div *ngIf="submitted && formsRegistra.controls.validaCorreo.errors" class="invalid">       
+                                            <ul>
+                                                <li>El correo es obligatorio</li>    
+                                                <li>El correo debe contener un dominio</li>    
+                                            </ul>
+                                        </div>
+                                    </div>
+    
+                                    <div class="col-lg-3">
+                                            <label for="fechaNacimiento">Fecha de Nacimiento</label>
+                                            <input formControlName="validaFecha" type="date"  class="form-control" id="fechaNacimiento"   name="alumnoRegistra.fechaNacimiento"  [(ngModel)] = "alumnoRegistra.fechaNacimiento"/>
+                                        <div *ngIf="submitted && formsRegistra.controls.validaFecha.errors" class="invalid">       
+                                            <ul>
+                                                <li>La fecha de nacimiento es obligatorio</li>    
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                            
+                                    <div class="col-lg-2">
+                                        <label for="deporte">Pais</label>
+                                        <select  formControlName="validaPais" name="alumnoRegistra.pais!.idPais" class="form-control" [(ngModel)]="alumnoRegistra.pais!.idPais" >
+                                            <option value="-1"> [Seleccione] </option>   
+                                            <option *ngFor="let x of lstPaises" value="{{x.idPais}}">
+                                                    {{x.nombre}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="submitted && formsRegistra.controls.validaPais.errors" class="invalid">       
+                                                <ul>
+                                                    <li>Seleccione el pais</li>    
+                                                </ul>
+                                            </div>
+    
+                                    </div>
+
+                                    </div>                                    
+    
+                            </div> 
+                            <div class="modal-footer">
+                                <button type="reset" class="btn btn-secondary btn-sm" style="width: 100px;">Limpiar</button>
+                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" id="btn_reg_cerrar" style="width: 100px;">Cerrar</button>
+                                <div class="form-group text-center">
+                                    <div class="col-lg-12">
+                                        <button  (click)="registra()"  id="id_reg_registra"   class="btn btn-success btn-sm "style="width: 100px;" [disabled]="submitted && formsRegistra.invalid">Registrar</button>
+                                    </div>
+                                </div>
+                            </div>
+    
+                   
+                        </form>
+                    </div>
+    
+    
+    
+                </div>
+            </div>
+        </div>
+    
+        <div class="modal fade" id="idModalActualizar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" style="max-width: 80%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Actualización de alumno</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                             <span aria-hidden="true">&times;</span>
+                         </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="content" [formGroup]="formsActualiza">
+                            <div class="submit-form">
+                                
+                                    <div  class="row">
+                                        <div class="col-lg-6">
+                                                <label for="nombre">Nombres</label>
+                                                <input  formControlName="validaNombreA" type="text" class="form-control"  id="idNombre" [(ngModel)]="alumno.nombres"  name="alumno.nombres" placeholder="Ingrese los nombres" />
+                                            <div *ngIf="submittedA && formsActualiza.controls.validaNombreA.errors" class="invalid">       
+                                                <ul>
+                                                    <li>El nombre es obligatorio</li>    
+                                                    <li>El nombre es de 3 a 30 caracteres</li>    
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6">
+                                                <label for="nombre">Apellidos</label>
+                                                <input formControlName="validaApellidoA" type="text" class="form-control"  id="idNombre" [(ngModel)]="alumno.apellidos"  name="alumno.apellidos"  placeholder="Ingrese los apellidos" />
+                                            <div *ngIf="submittedA && formsActualiza.controls.validaApellidoA.errors" class="invalid">       
+                                                <ul>
+                                                    <li>El apellido es obligatorio</li>    
+                                                    <li>El apellido es de 3 a 30 caracteres</li>    
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-2">
+                                                <label for="nombre">Telefono</label>
+                                                <input formControlName="validaTelefonoA" type="text" class="form-control" name="alumno.telefono"  id="idTelefono" [(ngModel)]="alumno.telefono"    placeholder="Ingrese el telefono"  />
+                                            <div *ngIf="submittedA && formsActualiza.controls.validaTelefonoA.errors" class="invalid">       
+                                                <ul>
+                                                    <li>El telefono es obligatorio</li>    
+                                                    <li>El telefono es de 9 digitos</li>    
+                                                </ul>
+                                            </div>
+                                        </div>
+                                       
+                                        <div class="col-lg-2">
+                                            <label for="id_reg_dni">DNI</label>
+                                            <input  formControlName="validaDniA" [(ngModel)]="alumno.dni" name="alumno.dni" type="text" placeholder="Ingrese DNI" class="form-control"  id="id_reg_dni"  maxlength="8"/>
+                                            <div *ngIf="submittedA && formsActualiza.controls.validaDniA.errors" class="invalid">
+                                                <ul>
+                                                    <li>El DNI es obligatorio</li>    
+                                                    <li>El DNI es de 8 dígitos</li>    
+                                                </ul>
+                                             </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <label for="correo">Correo</label>
+                                            <input formControlName="validaCorreoA" type="text" class="form-control" id="idCorreo"  name="alumno.correo" [(ngModel)]="alumno.correo"  placeholder="Ingrese correo" />
+                                        <div *ngIf="submittedA && formsActualiza.controls.validaCorreoA.errors" class="invalid">       
+                                            <ul>
+                                                <li>El correo es obligatorio</li>    
+                                                <li>El correo debe contener un dominio</li>    
+                                            </ul>
+                                        </div>
+                                    </div>
+    
+                                    <div class="col-lg-3">
+                                        <label for="fechaNacimiento">Fecha de Nacimiento</label>
+                                        <input formControlName="validaFechaA" type="date"  class="form-control" id="fechaNacimiento"   name="alumno.fechaNacimiento"  [(ngModel)] = "alumno.fechaNacimiento"/>
+                                    <div *ngIf="submittedA && formsActualiza.controls.validaFechaA.errors" class="invalid">       
+                                        <ul>
+                                            <li>La fecha de nacimiento es obligatorio</li>    
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                    <div class="col-lg-2">
+                                            <label for="deporte">Pais</label>
+                                            <select  formControlName="validaPaisA" name="alumno.pais!.idPais" class="form-control" [(ngModel)]="alumno.pais!.idPais" >
+                                                <option value="-1"> [Seleccione] </option>   
+                                                <option *ngFor="let x of lstPaises" value="{{x.idPais}}">
+                                                        {{x.nombre}}
+                                                </option>
+                                            </select>
+                                            <div *ngIf="submittedA && formsActualiza.controls.validaPaisA.errors" class="invalid">       
+                                                    <ul>
+                                                        <li>Seleccione el pais</li>    
+                                                    </ul>
+                                                </div>
+                                
+                                
+                                
+                                </div>
+                                </div>
+
+                          
+                                
+    
+                            </div> 
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" id="btn_reg_cerrar" style="width: 100px;">Cerrar</button>
+                                <div class="form-group text-center">
+                                    <div class="col-lg-12">
+                                        <button  (click)="actualiza()"  id="id_reg_registra"   class="btn btn-success btn-sm "style="width: 100px;" [disabled]="submittedA && formsActualiza.invalid">Actualizar</button>
+                                    </div>
+                                </div>
+                            </div>
+    
+                   
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>

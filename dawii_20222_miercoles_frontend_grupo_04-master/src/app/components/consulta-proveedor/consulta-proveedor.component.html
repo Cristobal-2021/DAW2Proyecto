@@ -1,0 +1,76 @@
+<app-menu></app-menu>
+<div style="padding: 2%">
+  <div>
+    <form class="content" (submit)="consultaProveedor()">
+      <div class="submit-form">
+
+        <div class="row">
+          <div class="col-lg-12">
+            <h3 class="text-center mb-5"><strong>CONSULTA DE PROVEEDOR</strong></h3>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top: 2%">
+          <label for="razonsocial">Razón Social</label>
+          <div class="col-lg-2">
+            <input type="text" class="form-control" name="razonsocial" id="razonsocial" [(ngModel)]="razonsocial" />
+          </div>
+          <label for="ruc">RUC</label>
+          <div class="col-lg-2">
+            <input type="text" class="form-control" name="ruc" id="ruc" [(ngModel)]="ruc" />
+          </div>
+          <label for="pais">País</label>
+          <div class="col-lg-2">
+            <select id="pais" name="pais" class="form-control" [(ngModel)]="selPais">
+              <option value="-1">[Seleccione]</option>
+              <option *ngFor="let aux of paises" value="{{ aux.idPais }}">
+                {{ aux.nombre }}
+              </option>
+            </select>
+          </div>
+          <div class="col-lg-2">
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="estado" [(ngModel)]="estado" checked
+                name="estado" />
+              <label class="custom-control-label" for="estado">Estado</label>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <button class="btn btn-success">Filtrar</button>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top: 3%">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Razón Social</th>
+                <th>RUC</th>
+                <th>Dirección</th>
+                <th>Celular</th>
+                <th>Contacto</th>
+                <th>Estado</th>
+                <th>Fecha de registro</th>
+                <th>País</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let aux of proveedores">
+                <td>{{ aux.idProveedor }}</td>
+                <td>{{ aux.razonsocial }}</td>
+                <td>{{ aux.ruc }}</td>
+                <td>{{ aux.direccion }}</td>
+                <td>{{ aux.celular }}</td>
+                <td>{{ aux.contacto }}</td>
+                <td>{{ aux.estado == 1 ? 'Activo' : 'Inactivo' }}</td>
+                <td>{{ aux.fechaRegistro }}</td>
+                <td>{{ aux.pais!.nombre }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

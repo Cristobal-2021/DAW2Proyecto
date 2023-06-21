@@ -1,0 +1,329 @@
+<app-menu></app-menu>
+<div style="padding: 2%">
+
+  <div>
+    <h3 class="text-center font-weight-bold">CRUD DE PROVEEDOR</h3>
+
+    <div class="col-md-23" style="margin-top: 3%">
+
+
+      <div class="row" style="height: 80px">
+        <div class="col-md-4">
+          <input [(ngModel)]="filtro" class="form-control" id="id_txt_filtro" name="filtro"
+            placeholder="Ingrese razón social" type="text" maxlength="30" />
+        </div>
+        <div class="col-md-2">
+          <button type="button" (click)="consulta()" class="btn btn-primary btn-sm" id="id_btn_filtrar"
+            style="width: 150px">Filtrar</button>
+        </div>
+        <div class="col-md-2">
+          <button type="button" data-toggle='modal' data-target="#idModalRegistrar" class='btn btn-primary btn-sm'
+            style="width: 150px">Registrar</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="content">
+
+            <table id="id_table" class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th style="width: 5%">#</th>
+                  <th style="width: 11%">Razon Social</th>
+                  <th style="width: 8%">RUC</th>
+                  <th style="width: 10%">Dirección</th>
+                  <th style="width: 7%">Celular</th>
+                  <th style="width: 10%">Contacto</th>
+                  <th style="width: 7%">Estado</th>
+                  <th style="width: 12%">Fecha de registro</th>
+                  <th style="width: 7%">País</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let p of proveedores">
+                  <td>{{ p.idProveedor }}</td>
+                  <td>{{ p.razonsocial }}</td>
+                  <td>{{ p.ruc }}</td>
+                  <td>{{ p.direccion }}</td>
+                  <td>{{ p.celular }}</td>
+                  <td>{{ p.contacto }}</td>
+                  <td>{{ p.estado==1?"Activo":"Inactivo"}}</td>
+                  <td>{{ p.fechaRegistro }}</td>
+                  <td>{{ p.pais!.nombre }}</td>
+                  <td>
+                    <div class="custom-control custom-switch">
+                      <input type="checkbox" class="custom-control-input" id="idEstado_{{ p.idProveedor }}"
+                        name="estado" [checked]="p.estado == 1 ? true : false" (change)="actualizaEstado(p)" />
+                      <label class="custom-control-label" for="idEstado_{{ p.idProveedor }}"></label>
+                    </div>
+                  </td>
+                  <td><button (click)="busca(p)" type="button" style="width: 90px" class="btn btn-success btn-sm"
+                      data-toggle="modal" data-target="#idModalActualizar">Editar</button></td>
+                  <td><button (click)="elimina(p)" type="button" style="width: 90px"
+                      class="btn btn-danger btn-sm">Eliminar</button></td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="modal fade" id="idModalRegistrar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+      <div class="modal-dialog" style="max-width: 70%;">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Registro de Proveedor</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <form class="content" [formGroup]="formsRegistra">
+              <div class="submit-form">
+
+                <div class="row">
+                  <div class="col-lg-4">
+                    <label for="id_reg_razonsocial">Razón social</label>
+                    <input formControlName="validaRazonSocial" type="text" [(ngModel)]="proveedor.razonsocial"
+                      placeholder="Ingrese la razón social" class="form-control" name="razonsocial"
+                      id="id_reg_razonsocial" />
+                    <div *ngIf="submitted && formsRegistra.controls.validaRazonSocial.errors" class="invalid">
+                      <ul>
+                        <li>La razón social es obligatoria</li>
+                        <li>Debe tener de 3 a 30 caracteres</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-4">
+                    <label for="id_reg_ruc">RUC</label>
+                    <input formControlName="validaRuc" type="text" [(ngModel)]="proveedor.ruc" placeholder="Ingrese RUC"
+                      class="form-control" name="ruc" id="id_reg_ruc" maxlength="11" />
+                    <div *ngIf="submitted && formsRegistra.controls.validaRuc.errors" class="invalid">
+                      <ul>
+                        <li>El RUC es obligatorio</li>
+                        <li>El RUC debe tener 11 números</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-4">
+                    <label for="id_reg_direccion">Dirección</label>
+                    <input formControlName="validaDireccion" type="text" [(ngModel)]="proveedor.direccion"
+                      placeholder="Ingrese dirección" class="form-control" name="direccion" id="id_reg_direccion" />
+                    <div *ngIf="submitted && formsRegistra.controls.validaDireccion.errors" class="invalid">
+                      <ul>
+                        <li>La dirección es obligatoria</li>
+                        <li>La dirección debe tener de 3 a 30 caracteres</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="row" style="margin-top: 2%">
+
+                  <div class="col-lg-4">
+                    <label for="id_reg_celular">Celular</label>
+                    <input formControlName="validaCelular" type="text" [(ngModel)]="proveedor.celular"
+                      placeholder="Ingrese el número celular" class="form-control" name="celular" id="id_reg_celular"
+                      maxlength="9" />
+                    <div *ngIf="submitted && formsRegistra.controls.validaCelular.errors" class="invalid">
+                      <ul>
+                        <li>El celular es obligatorio</li>
+                        <li>El celular debe tener 9 números y empezar con 9</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-4">
+                    <label for="id_reg_contacto">Contacto</label>
+                    <input formControlName="validaContacto" type="text" [(ngModel)]="proveedor.contacto"
+                      placeholder="Ingrese el contacto" class="form-control" name="contacto" id="id_reg_contacto" />
+                    <div *ngIf="submitted && formsRegistra.controls.validaContacto.errors" class="invalid">
+                      <ul>
+                        <li>El contacto es obligatorio</li>
+                        <li>El contacto debe tener de 3 a 30 caracteres</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-4 mb-3">
+                    <label for="id_reg_pais">País</label>
+                    <select formControlName="validaPais" [(ngModel)]="proveedor.pais!.idPais" id="id_reg_pais"
+                      name="pais" class="form-control">
+                      <option value="-1"> [Seleccione] </option>
+                      <option *ngFor="let x of lstPaises" value="{{x.idPais}}">{{x.nombre}}</option>
+                    </select>
+                    <div *ngIf="submitted && formsRegistra.controls.validaPais.errors" class="invalid">
+                      <ul>
+                        <li>Seleccione un país</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+              <div class="modal-footer">
+                <button type="reset" class="btn btn-warning" id="btn_reg_limpiar">Limpiar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btn_reg_cerrar"
+                  style="width: 100px;">Cerrar</button>
+                <div class="form-group text-center">
+                  <div class="col-lg-12">
+                    <button [disabled]="submitted && formsRegistra.invalid" id="id_reg_registra" (click)="registra()"
+                      class="btn btn-success form-control" style="width: 100px;">Registrar</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="idModalActualizar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" style="max-width: 80%;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Actualización de Proveedor</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+            <form class="content" [formGroup]="formsActualiza">
+              <div class="submit-form">
+
+                <div class="row">
+                  <div class="col-lg-4">
+                    <label for="id_act_razonsocial">Razón social</label>
+                    <input formControlName="validaRazonSocial" type="text" [(ngModel)]="proveedor.razonsocial"
+                      placeholder="Ingrese la razón social" class="form-control" name="razonsocial"
+                      id="id_act_razonsocial" />
+                    <div *ngIf="submitted && formsActualiza.controls.validaRazonSocial.errors" class="invalid">
+                      <ul>
+                        <li>La razón social es obligatoria</li>
+                        <li>Debe tener de 3 a 30 caracteres</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-4">
+                    <label for="id_act_ruc">RUC</label>
+                    <input formControlName="validaRuc" type="text" [(ngModel)]="proveedor.ruc" placeholder="Ingrese RUC"
+                      class="form-control" name="ruc" id="id_act_ruc" maxlength="11" />
+                    <div *ngIf="submitted && formsActualiza.controls.validaRuc.errors" class="invalid">
+                      <ul>
+                        <li>El RUC es obligatorio</li>
+                        <li>El RUC debe tener 11 números</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-4">
+                    <label for="id_act_direccion">Dirección</label>
+                    <input formControlName="validaDireccion" type="text" [(ngModel)]="proveedor.direccion"
+                      placeholder="Ingrese dirección" class="form-control" name="direccion" id="id_act_direccion" />
+                    <div *ngIf="submitted && formsActualiza.controls.validaDireccion.errors" class="invalid">
+                      <ul>
+                        <li>La dirección es obligatoria</li>
+                        <li>La dirección debe tener de 3 a 30 caracteres</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="row" style="margin-top: 2%">
+                  <div class="col-lg-3">
+                    <label for="id_act_celular">Celular</label>
+                    <input formControlName="validaCelular" type="text" [(ngModel)]="proveedor.celular"
+                      placeholder="Ingrese el celular" class="form-control" name="celular" id="id_act_celular"
+                      maxlength="9" />
+                    <div *ngIf="submitted && formsActualiza.controls.validaCelular.errors" class="invalid">
+                      <ul>
+                        <li>El celular es obligatorio</li>
+                        <li>El celular debe tener 9 números y empezar con 9</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3">
+                    <label for="id_act_contacto">Contacto</label>
+                    <input formControlName="validaContacto" type="text" [(ngModel)]="proveedor.contacto"
+                      placeholder="Ingrese el contacto" class="form-control" name="contacto" id="id_act_contacto" />
+                    <div *ngIf="submitted && formsActualiza.controls.validaContacto.errors" class="invalid">
+                      <ul>
+                        <li>El contacto es obligatorio</li>
+                        <li>El contacto debe tener de 3 a 30 caracteres</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 mb-3">
+                    <label for="id_act_pais">País</label>
+                    <select formControlName="validaPais" [(ngModel)]="proveedor.pais!.idPais" id="id_act_pais"
+                      name="pais" class="form-control">
+                      <option value="-1"> [Seleccione] </option>
+                      <option *ngFor="let x of lstPaises" value="{{x.idPais}}">{{x.nombre}}</option>
+                    </select>
+                    <div *ngIf="submitted && formsActualiza.controls.validaPais.errors" class="invalid">
+                      <ul>
+                        <li>Seleccione un país</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 mb-3">
+                    <label for="id_act_estado">Estado</label>
+                    <select formControlName="validaEstado" id="id_act_estado" [(ngModel)]="proveedor.estado"
+                      name="estado" class="form-control">
+                      <option value="-1"> [Seleccione] </option>
+                      <option value="1"> Activo </option>
+                      <option value="0"> Inactivo </option>
+                    </select>
+                    <div *ngIf="submitted && formsActualiza.controls.validaEstado.errors" class="invalid">
+                      <ul>
+                        <li>Seleccione un estado</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+
+
+              </div>
+
+              <div class="modal-footer">
+                <button type="reset" class="btn btn-warning" id="btn_act_limpiar">Limpiar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btn_act_cerrar">Cerrar</button>
+                <div class="form-group text-center">
+                  <div class="col-lg-12">
+                    <button [disabled]="submitted && formsActualiza.invalid" id="id_act_actualiza" (click)="actualiza()"
+                      class="btn btn-success form-control">Actualizar</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+
+
+
+
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>

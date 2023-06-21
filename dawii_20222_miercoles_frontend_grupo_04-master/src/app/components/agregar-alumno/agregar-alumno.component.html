@@ -1,0 +1,72 @@
+<app-menu></app-menu>
+  <div style="padding: 2%">
+        <form class="content" (ngSubmit)="insertaAlumno()" id ="idFormularioAlumno">
+        <div class="submit-form" >
+      
+           
+      
+          <div class="row">
+             <div class="col-lg-12">
+              <h6>Registro de Alumno</h6>
+            </div>
+            </div>
+      
+        
+          <div class="row" style="margin-top: 3%">
+           <div class="col-lg-6">
+             <label for="nombre">Nombres</label>
+               <input type="text" class="form-control" name="nombres"  id="idNombre" [(ngModel)]="alumno.nombres"  />
+             </div>
+           
+           <div class="col-lg-6">
+                <label for="nombre">Apellidos</label>
+                  <input type="text" class="form-control" name="apellidos"  id="idApellidos" [(ngModel)]="alumno.apellidos"  />
+             </div>
+             
+           <div class="col-lg-6">
+                <label for="nombre">Telefono</label>
+                  <input type="text" class="form-control" name="telefono"  id="idTelefono" [(ngModel)]="alumno.telefono"  />
+             </div>
+
+           <div class="col-lg-6">
+               <label for="dni">DNI</label>
+               <input type="text" class="form-control" name="dni" id="idDni"  maxlength="8" [(ngModel)] = "alumno.dni" />
+           </div>
+      
+          </div>
+       
+          <div class="row"> 
+           <div class="col-lg-6">
+            <label for="correo">Correo</label>
+              <input type="text" class="form-control" id="idCorreo"  name="correo" [(ngModel)]="alumno.correo" />
+           </div>
+      
+           <div class="col-lg-6">
+              <label for="fechaNacimiento">Fecha de Nacimiento</label>
+            <input type="date"  class="form-control" id="fechaNacimiento"   name="fechaNacimiento"  [(ngModel)] = "alumno.fechaNacimiento"/>
+           </div>
+           
+           <div class="col-lg-3">
+                <label for="deporte">Pais</label>
+                <select  id="deporte" name="pais" class="form-control" [(ngModel)]="alumno.pais!.idPais" >
+                    <option value="-1"> [Seleccione] </option>   
+                    <option *ngFor="let x of lstPaises" value="{{x.idPais}}">
+                            {{x.nombre}}
+                    </option>
+                </select>
+            </div>
+
+          </div>
+        
+          <div class="row" style="margin-top: 3%"> 
+           <div class="col-lg-12">
+             <button class="btn btn-success"  >Enviar</button>
+           </div>
+          </div>
+        
+          </div>
+      
+         </form>
+        </div>
+
+  

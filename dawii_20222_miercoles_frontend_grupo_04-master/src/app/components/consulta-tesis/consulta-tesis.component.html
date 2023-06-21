@@ -1,0 +1,74 @@
+<app-menu></app-menu>
+<div style="padding: 2%">
+<div>
+  <form class="content" (submit)="consultaTesis()" >
+    <div class="submit-form">
+      <div class="row">
+        <div class="col-lg-12">
+          <h3><strong>CONSULTA DE TESIS</strong></h3>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top: 2%">
+        <label for="titulo">Título</label>
+        <div class="col-lg-3">
+          <input type="text" class="form-control" name="titulo" id="titulo" [(ngModel)]= "titulo" />
+        </div>
+
+        <label for="tema">Tema</label>
+        <div class="col-lg-2">
+          <input type="text" class="form-control" name="tema" id="tema" [(ngModel)]= "tema" />
+        </div>
+
+        <label for="alumno">Alumno</label>
+        <div class="col-lg-3">
+          <select id="alumno" name="alumno" class="form-control" [(ngModel)] = "selAlumno" >
+            <option value="-1">[Seleccione]</option>
+            <option *ngFor="let aux of alumnos" value="{{ aux.idAlumno }}">
+              {{ aux.nombres }} {{ aux.apellidos }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-lg-1">
+          <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="estado" name="estado" [(ngModel)]= "estado" checked />
+            <label class="custom-control-label" for="estado">Estado</label>
+          </div>
+        </div>
+
+        <div class="col-lg-1">
+          <button class="btn btn-success">Filtrar</button>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top: 3%">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Título</th>
+              <th>Tema</th>
+              <th>Fecha Creación</th>
+              <th>Fecha Registro</th>
+              <th>Estado</th>
+              <th>Alumno</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let aux of tesis">
+              <td>{{ aux.idTesis }}</td>
+              <td>{{ aux.titulo }}</td>
+              <td>{{ aux.tema }}</td>
+              <td>{{ aux.fechaCreacion }}</td>
+              <td>{{ aux.fechaRegistro }}</td>
+              <td>{{ aux.estado == 1 ? 'Activo' : 'Inactivo' }}</td>
+              <td>{{ aux.alumno!.nombres }} {{ aux.alumno!.apellidos }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </form>
+</div>
+</div>
